@@ -28,17 +28,19 @@ dtype = torch.bfloat16 if torch.cuda.get_device_capability()[0] >= 8 else torch.
 
 def rotmat2qvec(R):
     """
-    Convert rotation matrix to COLMAP Hamilton quaternion:
+    COLMAP-compatible rotation matrix to Hamilton quaternion:
     qvec = [qw, qx, qy, qz]
     """
     import numpy as np
 
+    Rxx, Ryx, Rzx, Rxy, Ryy, Rzy, Rxz, Ryz, Rzz = R.flat
+
     K = np.array(
         [
-            [R[0, 0] - R[1, 1] - R[2, 2], 0.0, 0.0, 0.0],
-            [R[1, 0] + R[0, 1], R[1, 1] - R[0, 0] - R[2, 2], 0.0, 0.0],
-            [R[2, 0] + R[0, 2], R[2, 1] + R[1, 2], R[2, 2] - R[0, 0] - R[1, 1], 0.0],
-            [R[1, 2] - R[2, 1], R[2, 0] - R[0, 2], R[0, 1] - R[1, 0], R[0, 0] + R[1, 1] + R[2, 2]],
+            [Rxx - Ryy - Rzz, 0.0, 0.0, 0.0],
+            [Ryx + Rxy, Ryy - Rxx - Rzz, 0.0, 0.0],
+            [Rzx + Rxz, Rzy + Ryz, Rzz - Rxx - Ryy, 0.0],
+            [Ryz - Rzy, Rzx - Rxz, Rxy - Ryx, Rxx + Ryy + Rzz],
         ],
         dtype=float,
     ) / 3.0

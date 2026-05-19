@@ -251,8 +251,6 @@ def export_colmap_sparse_model(predictions, image_names, images_tensor, pred_ply
             tmp_txt_dir,
             "--output_path",
             sparse_dir,
-            "--input_type",
-            "TXT",
             "--output_type",
             "BIN",
         ],

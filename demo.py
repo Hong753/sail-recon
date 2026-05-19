@@ -397,5 +397,11 @@ if __name__ == "__main__":
     args.add_argument(
         "--ckpt", type=str, default=None, help="pretrained model checkpoint"
     )
+    args.add_argument(
+        "--colmap_exe",
+        type=str,
+        default="colmap",
+        help="COLMAP executable path",
+    )
     args = args.parse_args()
     demo(args)
